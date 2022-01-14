@@ -40,7 +40,8 @@ namespace APAD
 
 			Stopwatch sw = new Stopwatch();
 			sw.Start();
-			var ret = Puzzle.Search(Puzzle.PARTS_STATUS, field, 0);
+			//var ret = Puzzle.Search(Puzzle.PARTS_STATUS, field, 0);
+			var ret = Puzzle.Search(field, 0);
 			toolStripStatusLabel1.Text = string.Format("Puzzle.Search() {0}ms", sw.ElapsedMilliseconds);
 			if (ret != null)
 			{

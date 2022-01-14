@@ -440,6 +440,33 @@ namespace APAD
 			return ret;
 		}
 
+		public static int[] Search(UInt64 field, UInt32 used)
+		{
+			if (used == (1 << PARTS_STATUS.Count) - 1) return new int[PARTS_STATUS.Count];
+			UInt64 target = 1ul << 63;
+			while (target != 0 && (field & target) != 0)
+			{
+				target >>= 1;
+			}
+			for (int i = 0; i < PARTS_STATUS.Count; i++)
+			{
+				if ((used & (1u << i)) != 0) continue;
+				for (int j = 0; j < PARTS_STATUS[i].Count; j++)
+				{
+					if ((PARTS_STATUS[i][j] & target) == 0) continue;
+					if ((field & PARTS_STATUS[i][j]) == 0)
+					{
+						var ret = Search(field | PARTS_STATUS[i][j], used | (1u << i));
+						if (ret != null)
+						{
+							ret[i] = j;
+							return ret;
+						}
+					}
+				}
+			}
+			return null;
+		}
 		public static int[] Search(List<List<UInt64>> PARTS_STATUS, UInt64 field, int depth)
 		{
 			if (depth == PARTS_STATUS.Count)
